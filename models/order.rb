@@ -5,5 +5,7 @@ class Order
     @book = book
     @reader = reader
     @date = date
+    @book.rate += 1
+    @reader.activity += 1
   end
 end
