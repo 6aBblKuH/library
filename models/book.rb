@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Book
   attr_reader :title, :author
   attr_accessor :rate
@@ -10,5 +12,10 @@ class Book
 
   def to_s
     "#{@title}, #{@author.name}"
+  end
+
+  def <=>(other)
+    raise 'Unnormed data' unless other.is_a?(Book)
+    rate <=> other.rate
   end
 end

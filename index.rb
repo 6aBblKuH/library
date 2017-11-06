@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 require 'pry'
-require "yaml"
+require 'yaml'
 Dir['./models/*.rb'].each { |file| require file }
 
 authors = [
@@ -14,12 +16,12 @@ books = [
 ]
 readers = [
   Reader.new('Dima', 'd@i.us', { city: 'DP', street: 'Test st.', house: '1' }),
-  Reader.new('Ted', 't@i.ua', { city: 'DP', street: '1 st.', house: '0'})
+  Reader.new('Ted', 't@i.ua', { city: 'DP', street: '1 st.', house: '0' })
 ]
-orders = Array.new(10, Order.new(books.sample, readers.sample, Time.now))
+orders = []
+100.times { orders << Order.new(books.sample, readers.sample, Time.now) }
 
 data = [authors, books, readers, orders]
 library = Library.new(books, orders, readers, authors)
 library.save('data.yml', data)
-library_data = library.storaged_data('data.yml')
-library.info
+library.statistics_output
