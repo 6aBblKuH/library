@@ -3,18 +3,23 @@
 class Library
   attr_accessor :books, :orders, :readers, :authors
 
-  def initialize(books, orders, readers, authors)
+  def initialize(books = [], orders = [], readers = [], authors = [])
     @books = books
     @orders = orders
     @readers = readers
     @authors = authors
+    load
   end
 
-  def statistics_output
-    puts 'Most active reader is ' + most_active_reader.to_s
-    puts 'Most popular book is ' + most_popular_book.to_s
-    puts 'Quantity of orders most popular books:'
-    rated_books_output
+  def <<(item)
+    needed_array = case item
+    when Book then @books
+    when Order then @orders
+    when Reader then @readers
+    when Author then @authors
+    else "Unnormed argument #{item}"
+    end
+    needed_array << item
   end
 
   def rated_books_output
@@ -24,17 +29,14 @@ class Library
   end
 
   def most_popular_book
-    raise 'Books not found' if @books.empty?
     @books.max_by(&:rate)
   end
 
   def most_active_reader
-    raise 'Readers not found' if @readers.empty?
     @readers.max_by(&:activity)
   end
 
   def uniq_orders_by_book_rating(quantity = 1)
-    raise 'Orders not found' if @orders.empty?
     @orders.uniq(&:book).sort_by(&:book).first(quantity)
   end
 
@@ -53,7 +55,16 @@ class Library
   end
 
   def storaged_data(filename)
-    raise 'File not found' unless File.file? "data/#{filename}"
     YAML.load_file("data/#{filename}")
+  end
+
+  def load
+    data = storaged_data('data.yml')
+    if data
+      @authors.concat(data[:authors])
+      @books.concat(data[:books])
+      @readers.concat(data[:readers])
+      @orders.concat(data[:orders])
+    end
   end
 end

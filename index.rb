@@ -21,7 +21,13 @@ readers = [
 orders = []
 100.times { orders << Order.new(books.sample, readers.sample, Time.now) }
 
-data = [authors, books, readers, orders]
-library = Library.new(books, orders, readers, authors)
+data = { books: books, orders: orders, readers: readers, authors: authors }
+library = Library.new()
 library.save('data.yml', data)
-library.statistics_output
+
+puts 'Most active reader is:'
+puts library.most_active_reader.to_s
+puts 'Most popular book is:'
+puts library.most_popular_book.to_s
+puts 'Quantity of orders most popular books:'
+library.rated_books_output
