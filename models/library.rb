@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Library
+  DatafilePath = 'data/data.yml'
   attr_accessor :books, :orders, :readers, :authors
 
   def initialize(books = [], orders = [], readers = [], authors = [])
@@ -13,11 +14,11 @@ class Library
 
   def <<(item)
     needed_array = case item
-    when Book then @books
-    when Order then @orders
-    when Reader then @readers
-    when Author then @authors
-    else "Unnormed argument #{item}"
+                   when Book then @books
+                   when Order then @orders
+                   when Reader then @readers
+                   when Author then @authors
+                   else "Unnormed argument #{item}"
     end
     needed_array << item
   end
@@ -49,13 +50,10 @@ class Library
     counts
   end
 
-  def save(filename, data)
-    File.new("data/#{filename}", 'w+') unless File.exist?("data/#{filename}")
-    File.write("data/#{filename}", data.to_yaml)
-  end
-
-  def storaged_data(filename)
-    YAML.load_file("data/#{filename}")
+  def save
+    File.new(DatafilePath, 'w+') unless File.exist?(DatafilePath)
+    data = { books: @books, orders: @orders, readers: @readers, authors: @authors }
+    File.write(DatafilePath, data.to_yaml)
   end
 
   def load
@@ -66,5 +64,11 @@ class Library
       @readers.concat(data[:readers])
       @orders.concat(data[:orders])
     end
+  end
+
+  private
+
+  def storaged_data(filename)
+    YAML.load_file("data/#{filename}")
   end
 end

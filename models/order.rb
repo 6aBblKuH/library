@@ -3,10 +3,10 @@
 class Order
   attr_reader :book, :reader, :date
 
-  def initialize(book, reader, date)
+  def initialize(book, reader)
     @book = book
     @reader = reader
-    @date = date
+    @date = Time.now
     @book.rate += 1
     @reader.activity += 1
   end

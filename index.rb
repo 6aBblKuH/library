@@ -19,11 +19,9 @@ readers = [
   Reader.new('Ted', 't@i.ua', { city: 'DP', street: '1 st.', house: '0' })
 ]
 orders = []
-100.times { orders << Order.new(books.sample, readers.sample, Time.now) }
+100.times { orders << Order.new(books.sample, readers.sample) }
 
-data = { books: books, orders: orders, readers: readers, authors: authors }
-library = Library.new()
-library.save('data.yml', data)
+library = Library.new
 
 puts 'Most active reader is:'
 puts library.most_active_reader.to_s
